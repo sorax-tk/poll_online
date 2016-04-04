@@ -1,0 +1,18 @@
+      .option {
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+}
+.option.transparent {
+  opacity: 0.2;
+}
+.option.transparent:hover {
+  opacity: 0.7;
+}
+.chart-panel {
+  text-align: center;
+}
+.header {
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 2em;
+}

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="google" value="notranslate">
+    <script src="assets/libs/modernizr.js"></script>
+    <link rel="stylesheet" href="assets/style.css">
+  </head>
+<body>
+<html ng-app="angular-poll">
+	<head>
+		<title>{{AppTitle}} | Sorax</title>
+		<link rel="stylesheet" href="assets/libs/bootstrap.min.css">
+	</head>
+	<body ng-controller="AppCtrl">
+		<div class="container">
+			<div class="col-md-6 col-md-offset-3">
+				<div class="header">
+					<h2><a href="" sref="home">{{AppTitle}}</a></h2>
+				</div>
+				<div class="row marketing">
+					<div class="col-sm-12">
+						<div ui-view></div>
+					</div>
+				</div>
+				<footer class="footer">
+					<blockquote>
+						<h6 class="text-muted">Created <a href="https://sorax.tk/" target="_blank">Sorax</a>
+					</blockquote>
+				</footer>
+			</div>
+		</div>
+		<script id="templates/home.html" type="text/ng-template">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<textarea class="form-control has-error" placeholder="Напишите свой вопрос" ng-model="Poll.Question"></textarea>
+				</div>
+					<ul class="list-group">
+						<li class="list-group-item option" ng-repeat="(key, Answer) in Poll.Answers">
+							<div class="input-group input-group-lg" ng-class="(key === 0 && !Answer.label) || (key === 1 && !Answer.label) ? 'has-warning' : ''">
+								<span class="input-group-addon">{{key + 1}}</span>
+								<input type="text" class="form-control" placeholder="Ответ {{key + 1}}" ng-model="Answer.label">
+								<span class="input-group-btn">
+									<button class="btn btn-default" type="button" ng-click="ClearAnswer(Answer)" ng-show="Answer.label">Очистить</button>
+									<button class="btn btn-danger" type="button" ng-click="RemoveAnswer(key)">X</button>
+								</span>
+							</div>
+						</li>
+						<li class="list-group-item option transparent">
+							<div class="input-group input-group-lg">
+								<span class="input-group-addon">{{Poll.Answer.length + 1}}</span>
+								<input type="text" class="form-control" placeholder="Ответ {{Poll.Answers.length + 1}}" disabled>
+								<span class="input-group-btn">
+									<button class="btn btn-success" type="button" ng-click="AddAnswer()">+</button>
+								</span>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="form-group">
+				<button class="btn btn-success btn-lg" type="button" ng-click="CreatePoll()" ng-disabled="!Poll.Question || (!Poll.Answers[0].label || !Poll.Answers[1].label)">Создать опросс</button>
+			</div>
+		</script>
+		<script id="templates/voting.html" type="text/ng-template">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4><small>Голосование по опросу:</small></h4>
+					<h2 ng-bind="Poll.Question"></h2>
+				</div>
+				<ul class="list-group">
+					<li class="list-group-item" ng-repeat="Answer in Poll.Answers">
+						<div class="radio">
+						<label>
+							<input type="radio" name="AnswersRadios" ng-model="MyVote.Answer" ng-value="Answer">
+							{{Answer.label}}
+						</label>
+					</div>
+					</li>
+				</ul>
+			</div>
+			<button class="btn btn-success btn-lg" ng-click="Vote()" ng-disabled="!MyVote.Answer">Голосовать</button>
+			<div class="form-group">
+				<h3>Ссылка на опрос</h3>
+				<input type="text" class="form-control" ng-value="PollUrl" onClick="this.select();"/>
+			</div>
+		</script>
+		<script id="templates/results.html" type="text/ng-template">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4><small>Результаты опроса:</small></h4>
+					<h1 ng-bind="Poll.Question"></h1>
+				</div>
+				<center><canvas id="ResultsChart" width="400" height="400"></canvas></center>
+				</div>
+				<ul class="list-group">
+					<li class="list-group-item" ng-repeat="(key, Answer) in Poll.Answers">
+						<h4>Ответ {{key + 1}}: "{{Answer.label}}"</h4>
+						<p><strong>{{Answer.value || 0}} голос<span ng-if="Answer.value != 1">это</span></strong> из <em>{{(Answer.value / TotalVotes) * 100 || 0 | number: 2}}%</em> от общего числа голосов.</p>
+					</li>
+				</ul>
+				<div class="panel-footer">{{TotalVotes}} всего голосов.</div>
+			</div>
+			<div class="form-group">
+				<h3>Ссылка на результаты опроса:</h3>
+				<input type="text" class="form-control" ng-value="PollUrl" onClick="this.select();"/>
+			</div>
+		</script>
+		<!-- Angular -->
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+		<!-- ui router -->
+		<script src="assets/libs/angular-ui-router.min.js"></script>
+		<!-- Firebase -->
+		<script src="assets/libs/firebase.js"></script>
+		<!-- AngularFire -->
+		<script src="assets/libs/angularfire.min.js"></script>
+		<!-- chart.js -->
+		<script src="assets/libs/Chart.min.js"></script>
+		<!-- ngSanitize -->
+		<script src="assets/libs/angular-sanitize.min.js"></script>
+		<!-- Main Script -->
+		<script src="assets/main.js"></script>
+
+	</body>
+</html>
+
+
